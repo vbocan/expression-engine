@@ -1,0 +1,14 @@
+**/bin
+**/obj
+.git
+.github
+.vs
+.vscode
+TestResults
+artifacts
+benchmarks
+tests
+*.md
+LICENSE
+Dockerfile
+.dockerignore

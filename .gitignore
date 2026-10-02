@@ -1,0 +1,39 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+artifacts/
+*.nupkg
+*.snupkg
+
+# IDEs
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.user
+*.suo
+*.rsuser
+*.sln.iml
+*.DotSettings.user
+_ReSharper*/
+
+# Tests, coverage, benchmarks
+TestResults/
+[Tt]est[Rr]esult*/
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+BenchmarkDotNet.Artifacts/
+
+# Logs and temp files
+*.log
+*.tmp
+*.binlog
+
+# OS
+.DS_Store
+Thumbs.db

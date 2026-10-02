@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    This project exists to build, test and document the library during development.
+    ExpressionEngine is distributed as source: copy the .cs files of this folder into your own project.
+    Multi-targeting netstandard2.0 proves the code also compiles for older runtimes.
+  -->
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
+    <AssemblyName>ExpressionEngine</AssemblyName>
+    <RootNamespace>ExpressionEngine</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ExpressionEngine.Tests" />
+  </ItemGroup>
+
+</Project>

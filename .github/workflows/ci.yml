@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build & test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Upload test results and coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}
+          path: TestResults/**
+          if-no-files-found: ignore
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the image
+        run: docker build --tag expression-engine .
+
+      - name: Smoke test, one expression
+        run: |
+          result=$(docker run --rm expression-engine "2 * (3 + 4)")
+          test "$result" = "14"
+
+      - name: Smoke test, scripted session without a terminal
+        run: |
+          printf 'r = 10\n2 * pi * r\n:def hyp(a, b) = sqrt(a^2 + b^2)\nhyp(3, 4)\nquit\n' \
+            | docker run --rm -i expression-engine | tee session.txt
+          grep -q "62.83185307179586" session.txt
+          grep -q "^> hyp(3, 4)" session.txt
+
+      - name: Smoke test, the manual and the examples are inside the image
+        run: |
+          docker run --rm expression-engine --manual | grep -q "ExpressionEngine Manual"
+          docker run --rm expression-engine --examples | grep -q "Arithmetic"
