@@ -23,7 +23,7 @@ COPY docs/MANUAL.md docs/MANUAL.md
 RUN dotnet publish src/ExpressionEngine.Playground -c Release -o /app --no-self-contained -p:UseAppHost=false
 
 # ---- run -----------------------------------------------------------------------------------------------------------
-FROM mcr.microsoft.com/dotnet/runtime:10.0 AS final
+FROM mcr.microsoft.com/dotnet/runtime:11.0 AS final
 WORKDIR /app
 
 LABEL org.opencontainers.image.title="ExpressionEngine playground" \
